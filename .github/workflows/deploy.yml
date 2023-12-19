@@ -24,5 +24,6 @@ jobs:
     - uses: aws-actions/configure-aws-credentials@v4
       with:
         role-to-assume: arn:aws:iam::503479554940:role/AssumeRoleWithWebIdentityAdmin
+        role-session-name: rg-systems-gh-actions
         aws-region: us-east-2
     - run: yarn cdk deploy --require-approval never

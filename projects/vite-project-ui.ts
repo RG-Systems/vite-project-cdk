@@ -19,33 +19,12 @@ export const VITE_PROJECT_UI: Project = {
                 {
                     name: 'prod',
                     path: '',
-                    optimal: false,
+                    optimal: true,
                     variables: {
                         'VITE_API_URL': 'https://api.example.com',
                     },
                 },
             ],
         },
-        // {
-        //     id: '503479554940',
-        //     environments: [
-        //         {
-        //             name: 'uat',
-        //             path: '',
-        //             optimal: false,
-        //             variables: {
-        //                 'VITE_API_URL': 'https://dev-api.example.com',
-        //             },
-        //         },
-        //         {
-        //             name: 'prod',
-        //             path: '',
-        //             optimal: true,
-        //             variables: {
-        //                 'VITE_API_URL': 'https://qa-api.example.com',
-        //             },
-        //         },
-        //     ],
-        // },
     ],
 };
