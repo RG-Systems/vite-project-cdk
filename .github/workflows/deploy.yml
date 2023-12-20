@@ -27,7 +27,7 @@ on:
           - prod
 
 jobs:
-  build:
+  main:
 
     runs-on: ubuntu-latest
 
