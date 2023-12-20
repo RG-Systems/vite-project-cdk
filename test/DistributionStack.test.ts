@@ -2,11 +2,12 @@ import { App } from 'aws-cdk-lib';
 import { Template } from 'aws-cdk-lib/assertions';
 import { StorageStack } from '../stacks/StorageStack';
 import { DistributionStack } from '../stacks/DistributionStack';
+import { PriceClass } from 'aws-cdk-lib/aws-cloudfront';
 
 test('DistributionStack creates a CloudFront distribution', () => {
     const app = new App();
     const bucket = new StorageStack(app, 'test-bucket').bucket;
-    const stack = new DistributionStack(app, 'test-stack', { bucket, path: '/test', optimal: true });
+    const stack = new DistributionStack(app, 'test-stack', { bucket, path: '/test', priceClass: PriceClass.PRICE_CLASS_ALL });
 
     const template = Template.fromStack(stack);
 
@@ -21,7 +22,7 @@ test('DistributionStack creates a CloudFront distribution', () => {
                     }
                 ]
             },
-            PriceClass: 'PriceClass_All',
+            PriceClass: PriceClass.PRICE_CLASS_ALL,
             CustomErrorResponses: [
                 {
                     ErrorCode: 404,
@@ -36,7 +37,7 @@ test('DistributionStack creates a CloudFront distribution', () => {
 test('DistributionStack creates a CloudFront function', () => {
     const app = new App();
     const bucket = new StorageStack(app, 'test-bucket').bucket
-    const stack = new DistributionStack(app, 'test-stack', { bucket, path: '/test', optimal: true, variables: { test: 'value' } });
+    const stack = new DistributionStack(app, 'test-stack', { bucket, path: '/test', variables: { test: 'value' } });
 
     const template = Template.fromStack(stack);
 
