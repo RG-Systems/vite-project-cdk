@@ -1,33 +1,25 @@
 # This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
 # For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
 
-name: Deploy
+name: Bootstrap
 
 on:
   workflow_call:
     inputs:
-      commit:
-        description: 'Commit hash to deploy'
+      stack:
+        description: 'Stack to bootstrap'
         type: string
         required: true
-      environment:
-        description: 'Environment to destroy to'
-        required: true
-        type: string
   workflow_dispatch:
     inputs:
-      commit:
-        description: 'Commit hash to deploy'
-        required: true
-      environment:
-        description: 'Environment to destroy to'
-        required: true
+      stack:
+        description: 'Stack to bootstrap'
         type: choice
-        default: qa
+        required: true
         options:
-          - tmp
-          - qa
-          - prod
+          - 'vite-project-ui-storage'
+          - 'vite-project-ui-env-qa'
+          - 'vite-project-ui-env-prod'
 
 jobs:
   build:
@@ -52,11 +44,4 @@ jobs:
         role-to-assume: arn:aws:iam::503479554940:role/RG-Systems-GH-Actions
         role-session-name: vp-cdk-deploy
         aws-region: us-east-1
-    - id: vars
-      run: |
-        if [ "${{ inputs.environment }}" = "tmp" ]; then
-          echo "stack=vite-project-ui-env-tmp-${{ inputs.commit }}" >> $GITHUB_OUTPUT
-        else
-          echo "stack=vite-project-ui-env-${{ inputs.environment }}" >> $GITHUB_OUTPUT
-        fi
-    - run: yarn cdk deploy ${{ steps.vars.outputs.stack }} --require-approval never
+    - run: yarn cdk deploy ${{ inputs.stack }} --require-approval never

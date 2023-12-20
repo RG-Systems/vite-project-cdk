@@ -6,28 +6,28 @@ import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
 import * as origins from 'aws-cdk-lib/aws-cloudfront-origins';
 
 type Props = cdk.StackProps & {
-    path: string;
+    path?: string;
     bucket: Bucket;
-    optimal: boolean;
+    priceClass?: cloudfront.PriceClass;
     variables?: Record<string, string>;
 };
 
 export class DistributionStack extends cdk.Stack {
-    constructor(scope: Construct, id: string, { bucket, path, optimal, variables, ...props }: Props) {
+    constructor(scope: Construct, id: string, { bucket, path, variables, priceClass, ...props }: Props) {
         super(scope, id, props);
 
         new cloudfront.Distribution(this, id, {
-            priceClass: optimal ? cloudfront.PriceClass.PRICE_CLASS_ALL : cloudfront.PriceClass.PRICE_CLASS_100,
-            defaultRootObject: `index.html`,
+            priceClass: priceClass ?? cloudfront.PriceClass.PRICE_CLASS_100,
+            defaultRootObject: 'index.html',
             errorResponses: [
                 {
                     httpStatus: 404,
                     responseHttpStatus: 200,
-                    responsePagePath: `/index.html`,
+                    responsePagePath: '/index.html',
                 },
             ],
             defaultBehavior: {
-                origin: new origins.S3Origin(bucket, { originPath: path }),
+                origin: new origins.S3Origin(bucket, { originPath: path  ?? '' }),
                 viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
                 functionAssociations: [
                     {
