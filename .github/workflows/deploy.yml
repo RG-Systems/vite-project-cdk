@@ -46,7 +46,8 @@ jobs:
       contents: read
 
     steps:
-    - uses: actions/checkout@v4
+    - if: github.event_name != 'workflow_call'
+      uses: actions/checkout@v4
     - name: Use Node.js 20.x
       uses: actions/setup-node@v4
       with:
