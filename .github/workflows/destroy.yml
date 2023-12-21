@@ -56,4 +56,4 @@ jobs:
         else
           echo "stack=vite-project-ui-env-${{ inputs.environment }}" >> $GITHUB_OUTPUT
         fi
-    - run: yarn cdk destroy ${{ steps.vars.outputs.stack }} --require-approval never
+    - run: npx cdk destroy ${{ steps.vars.outputs.stack }} --require-approval never

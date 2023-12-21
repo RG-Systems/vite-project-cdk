@@ -28,4 +28,4 @@ jobs:
         role-to-assume: arn:aws:iam::503479554940:role/RG-Systems-GH-Actions
         role-session-name: vp-cdk-deploy
         aws-region: us-east-1
-    - run: yarn cdk synth
+    - run: npx cdk synth
