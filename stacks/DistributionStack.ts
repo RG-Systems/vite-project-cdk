@@ -16,7 +16,7 @@ export class DistributionStack extends cdk.Stack {
     constructor(scope: Construct, id: string, { bucket, path, variables, priceClass, ...props }: Props) {
         super(scope, id, props);
 
-        new cloudfront.Distribution(this, id, {
+        const distribution = new cloudfront.Distribution(this, id, {
             priceClass: priceClass ?? cloudfront.PriceClass.PRICE_CLASS_100,
             defaultRootObject: 'index.html',
             errorResponses: [
@@ -53,6 +53,18 @@ export class DistributionStack extends cdk.Stack {
                     }
                 ],
             },
+        });
+
+        new cdk.CfnOutput(this, "DeploymentUrl", {
+          value: "https://" + distribution.distributionDomainName
+        });
+
+        new cdk.CfnOutput(this, "DistributionId", {
+          value: distribution.distributionId
+        });
+
+        new cdk.CfnOutput(this, 'BucketName', {
+          value: bucket.bucketName,
         });
     }
 }

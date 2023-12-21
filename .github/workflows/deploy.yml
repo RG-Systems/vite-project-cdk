@@ -11,6 +11,16 @@ on:
         description: 'Environment to destroy to'
         required: true
         type: string
+    outputs:
+      bucket:
+        description: 'S3 bucket name'
+        value: ${{ jobs.main.result.outputs.bucket }}
+      id:
+        description: 'Cloudfront distribution id'
+        value: ${{ jobs.main.result.outputs.id }}
+      url:
+        description: 'Cloudfront distribution url'
+        value: ${{ jobs.main.result.outputs.url }}
   workflow_dispatch:
     inputs:
       commit:
@@ -56,4 +66,9 @@ jobs:
         else
           echo "stack=vite-project-ui-env-${{ inputs.environment }}" >> $GITHUB_OUTPUT
         fi
-    - run: yarn cdk deploy ${{ steps.vars.outputs.stack }} --require-approval never
+    - run: yarn cdk deploy ${{ steps.vars.outputs.stack }} --require-approval never --outputs-file cdk-outputs.json
+    - id: result
+      run: |
+        echo "bucket=$(jq -r '."${{ steps.vars.outputs.stack }}".BucketName' cdk-outputs.json)" >> $GITHUB_OUTPUT
+        echo "id=$(jq -r '."${{ steps.vars.outputs.stack }}".DistributionId' cdk-outputs.json)" >> $GITHUB_OUTPUT
+        echo "url=$(jq -r '."${{ steps.vars.outputs.stack }}".DeploymentUrl' cdk-outputs.json)" >> $GITHUB_OUTPUT
