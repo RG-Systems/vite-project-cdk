@@ -9,7 +9,7 @@ test('StorageStack creates an S3 bucket', () => {
     const template = Template.fromStack(stack);
 
     template.hasResourceProperties('AWS::S3::Bucket', {
-        BucketName: 'test-bucket-storage',
+        BucketName: 'test-bucket',
         PublicAccessBlockConfiguration: {
             BlockPublicAcls: true,
             BlockPublicPolicy: true,
