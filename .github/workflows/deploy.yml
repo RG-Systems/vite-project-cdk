@@ -11,6 +11,11 @@ on:
         description: 'Environment to destroy to'
         required: true
         type: string
+      skip_checkout:
+        description: 'Skip checkout'
+        required: false
+        type: boolean
+        default: true
     outputs:
       bucket:
         description: 'S3 bucket name'
@@ -46,7 +51,7 @@ jobs:
       contents: read
 
     steps:
-    - if: ${{ github.event_name != 'workflow_call' }}
+    - if: ${{ !inputs.skip_checkout }}
       uses: actions/checkout@v4
     - name: Use Node.js 20.x
       uses: actions/setup-node@v4
